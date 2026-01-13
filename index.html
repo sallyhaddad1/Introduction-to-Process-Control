@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Process Control  </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+   <style>
+       .youtube-button {
+    /* تنسيق لجعله زرًا */
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px; /* حواف مستديرة */
+    cursor: pointer;
+    
+    /* ألوان يوتيوب */
+    background-color: #ff0000; /* أحمر يوتيوب */
+    color: #ffffff; /* نص أبيض */
+    border: none;
+    
+    /* تأثير عند المرور */
+    transition: background-color 0.3s ease;
+}
+
+.youtube-button:hover {
+    background-color: #cc0000;
+}
+        body {
+            font-family: 'Inter', 'Tajawal', sans-serif; 
+            background-color: #f1f5f9; 
+            overscroll-behavior: none;
+            margin: 0;
+        }
+        .slide {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+            height: 100%;
+            overflow: hidden;
+        }
+		
+        .slide-visible {
+            display: block;
+        }
+        .slide-hidden {
+            display: none !important;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .quiz-option {
+            transition: all 0.2s ease;
+        }
+        .quiz-option.correct {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46 !important;
+            font-weight: 600;
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+            font-weight: 600;
+        }
+        .quiz-option:disabled:not(.correct):not(.incorrect) {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .quiz-option:disabled {
+            cursor: not-allowed;
+        }
+        .slide-content-wrapper {
+            height: calc(100% - 4rem - 1px);
+            overflow-y: auto;
+            padding-bottom: 2rem;
+        }
+        .slide-content-wrapper::-webkit-scrollbar { width: 8px; }
+        .slide-content-wrapper::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        .slide-content-wrapper::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        .slide-content-wrapper::-webkit-scrollbar-thumb:hover { background: #1d4ed8; }
+        #video-modal-content { width: 90%; max-width: 900px; }
+        #youtube-iframe { aspect-ratio: 16 / 9; width: 100%; height: auto; }
+        .slide-header {
+            position: sticky;
+            top: 0;
+            background-color: rgba(241, 245, 249, 0.95);
+            backdrop-filter: blur(5px);
+            padding-top: 0.25rem;
+            padding-bottom: 0.75rem;
+            z-index: 5;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        /* Placeholder style for missing images */
+        img.placeholder-image {
+            background-color: #e2e8f0;
+            border: 2px dashed #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-weight: bold;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            position: relative;
+            /* توسيط المحتوى داخل body الجديد */
+            margin: 50px auto; 
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .training-card {
+            background-color: #0d1b3f;
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            width: 48%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding-top: 100px;
+        }
+
+        .card-header {
+            position: absolute;
+            top: -50px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .image-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: white;
+            border: 5px solid #ab141c;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            opacity: 1; 
+        }
+
+        .list {
+            list-style: none;
+            padding: 0;
+            margin-top: 40px;
+            text-align: right;
+            font-size: 1.1em;
+            width: 100%;
+            padding-right: 20px;
+        }
+
+        .list li {
+            margin-bottom: 15px;
+        }
+
+        .timeline-bar {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background-color: #ab141c;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px;
+        }
+
+        .timeline-text {
+            color: white;
+            font-weight: bold;
+            padding: 0 20px;
+            text-transform: uppercase;
+            font-size: 1.2em;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .left-arrow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -20px;
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-right: 20px solid #ab141c;
+        }
+
+        .right-arrow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -20px;
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #ab141c;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md w-full p-4 z-10 flex justify-between items-center flex-shrink-0 border-b border-slate-200">
+        <div class="flex items-center min-w-0"> 
+            <div class="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+                <!-- Icon representing Industrial Equipment -->
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a8 8 0 11-14.856 0M12 21a8 8 0 100-16 8 8 0 000 16z"></path></svg>
+            </div>
+            <div class="ml-3 truncate">
+                <h1 class="text-lg md:text-xl font-bold text-slate-900">Introduction to Process Control </h1>
+            </div>
+        </div>
+        <div class="text-sm font-medium text-slate-500 flex-shrink-0 ml-2 bg-slate-100 px-3 py-1 rounded-full" id="slide-counter">Slide 1 / 18</div>
+    </header>
+
+    <!-- Main Slide Container -->
+    <main id="slide-container" class="flex-1 overflow-hidden p-4 md:p-8 lg:p-12 relative">
+        
+        <!-- Slide 0: Title -->
+        <section id="slide-0" class="slide slide-visible flex flex-col justify-center items-center text-center p-4">
+            <div class="bg-white p-10 md:p-16 rounded-2xl shadow-xl max-w-4xl w-full border-t-8 border-blue-800">
+                <span class="block text-sm font-bold text-blue-600 uppercase tracking-widest mb-2">Target Engineering Construction - National Emirates Training</span>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-6">Introduction to Process Control <br/></h1>
+                <div class="w-24 h-1 bg-yellow-500 mx-auto mb-8 rounded-full"></div>
+                <p class="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">A comprehensive competency-based course on industrial stationary assets, from Heat Exchangers to Separation Columns.</p>
+                        <button id="start-btn" class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform transform hover:scale-105">
+    Start Course
+</button>
+            </div>
+        </section>
+
+        <!-- Slide 1: CONTENT -->
+   <section id="slide-1" class="slide">
+    <div class="slide-content-wrapper">
+        <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-blue-50 p-6 rounded-xl border border-blue-100 hover:shadow-md transition-shadow">
+                    
+                    <ul class="space-y-4 text-slate-700 ml-4"> 
+                        
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="font-medium">The importance of process control & Terminologies</span>
+                        </li>
+
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="font-medium">Control theory basics</span>
+                        </li>
+
+                        <li class="flex flex-col pt-2">
+                            
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-blue-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">Process control terms:</span>
+                            </div>
+
+                            <ul class="list-disc list-inside ml-7 mt-2 space-y-1 text-sm">
+                                <li>Control algorithms</li>
+                                <li>Manual Control</li>
+                                <li>On-off Control</li>
+                                <li>
+                                    Modulating control:
+                                    <ul class="list-disc list-inside ml-4 mt-1 space-y-1">
+                                                <li>Feedback control</li>
+                                                <li>Cascade control</li>
+                                                <li>Feedforward control</li>
+                                                <li>Ratio control</li>
+                                                <li>Split Range Control</li>
+                                           
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        </ul>
+                </div>
+                </div>
+        </div>
+    </div>
+</section>
+
+        <!-- Slide 2:  The importance of process control-->
+<section id="slide-2" class="slide">
+        <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">The importance of process control
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <p style=" color: black;">
+				<strong>Process:</strong><br>
+Refers to the methods of changing or refining raw materials to create end products.<br><br>
+The raw materials (which pass through or remain in liquid, gas or solids states) during the process can be :<br>
+      - Transferred , Measured , Mixed , Heated Or Cooled ,<br>
+      - Filtered , Stored , Handled in other way <br>
+     - To produce the end-product.<br>
+<br>
+Process Industries include:<br>
+Chemical industry , oil and gas industry , Food industries , water treatment industry , power industry ,…….<br>
+
+				</p>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+              	  <p style=" color: black;">
+				<strong>Process control:</strong><br>
+Refers to the methods that are used to control process variables when manufacturing a product.<br><br>
+**Examples:<br>
+- Control proportion of one ingredient to another<br>
+- Control temperature or pressure of material <br>
+- Control mixing of ingredients<br>
+<br><br>
+Process control technology is the tool that enables manufacturers to keep their operations running within specified limits and to set more precise limits to maximize profitability, ensure quality and safety
+
+				</p>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+ <!-- Slide 3: The importance of process control -->
+        <section id="slide-3" class="slide">
+              <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">The importance of process control
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <p style=" color: black;">
+				<strong>The importance of process control:</strong><br>
+      - Reduce variability 
+<br>
+      - Increase efficiency 
+ <br>
+     - Ensure safety
+<br><br>
+	<strong>A. Reduce variability </strong><br>
+	Manufactures can save money by reducing variability.<br><br>
+Example:<br>
+In gasoline blending product, as many as 12 or more different components may be blended to make a specific grade of gasoline.<br>
+If the refinery does not have precise control over the flow of the separate components , the gasoline may get too much of the high –octane components.<br>
+<br>
+As a result, customers would receive a high-grade gasoline than they paid for, and the refinery would lose money.<br>
+And the opposite situation could also happen.
+<br>
+				</p>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+				 <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture1.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+					<br> 
+              	  <p style=" color: black;">
+				<strong>A. Reduce variability
+</strong><br>
+Reducing variability reduce the need of product padding.
+<br><br>
+<strong>Padding:
+</strong><br>
+The process of making a product of higher quality than it needs to meet the specifications.
+<br><br>
+Where manufacturers are forced to pad the product when the process control is poor and there is  variability in the end product to ensure that specifications are met.
+<br><br>
+So, with accurate process control, the optimal point can be moved to be closer to the actual product specification and thus save the manufacturer money.
+
+				</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+        <!-- Slide 3: The importance of process control -->
+       <section id="technical-soft-skills" class="slide">
+            <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">The importance of process control
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <p style=" color: black;">
+				<strong>B. Increase Efficiency</strong><br>
+Some processes need to be maintained at a specific point to maximize the efficiency.
+<br><br>
+** Examples:<br>
+- A control point might be the temperature at which a chemical reaction takes place.<br>
+- Control the level of water to be at the mid of the boiler to have the maximum boiler efficiency.
+<br>
+<br>
+Manufacturers save money by minimizing the resources required to produce the end-product.
+<br>
+
+				</p>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+              	  <p style=" color: black;">
+				<strong>C. Ensure Safety</strong><br>
+Precise control is required to ensure safety.
+<br><br>
+** Examples:<br>
+- Maintaining proper boiler pressure by controlling the inflow of air used in combustion and the outflow of exhaust gases
+
+<br><br>
+A run away process (such as an out of control nuclear or chemical reaction ) shall be controlled as the consequence of a run away process can be catastrophic.
+<br><br>
+The term automatic process control came into wide use when people learned to adapt automatic regulatory procedures to manufacturer products or process material more efficiently.
+<br><br>
+<strong>Such procedure are called automatic as no manual intervention is required to regulate them</strong>
+
+				</p>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- Slide 4:Control theory basics-->
+		 <section id="slide-4" class="slide">
+            <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">The importance of process control
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+				  <p style=" color: black;">
+				<strong>Requirements on the basic control system as a protection layer as per IEC-61511:
+</strong>
+				</p>
+				  	 <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture2.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+                
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Control theory basics
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+			
+					<br> 
+              	  <p style=" color: black;">
+				<strong>The control loop
+</strong><br>
+Control loops in the process control industry require three tasks to occur:
+<br><br>
+- Measure<br>
+- Compare <br>
+- Adjust 
+<br>
+
+				</p>
+				 <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture3.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+		
+		 <!-- Slide 6: Control theory basics-->
+<section id="slide-5" class="slide">
+   
+         <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Control theory basics
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  	 <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture4.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+                  <p style=" color: black;">
+				<strong>Range
+</strong><br>
+Defined in IEC 60902 as follows: The region of values between the lower and upper limits of the quantity under consideration.
+It is expressed by stating the lower and upper limits (e.g. minus 1 to 10 bar (a)).<br><br>
+<strong>Span
+</strong><br>
+Defined in IEC 60902 as follows: The algebraic difference between the upper and lower limit values of a given range.
+It is expressed as a figure and unit of measurement (e.g. 11 bar).
+
+<br>
+
+				</p>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Control theory basics
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+			
+					<br> 
+              	  <p style=" color: black;">
+				<strong>LRL
+</strong><br>
+Lower Range Limit; the lowest quantity that a device is designed to measure. 
+<br><br>
+<strong>URL
+</strong><br>
+Upper Range Limit; the highest quantity that a device is designed to measure. 
+<br><br>
+<strong>Instrument range
+</strong><br>
+The region in which the instrument is designed to operate. It is a physical capability of the device. The region limits are expressed by stating the LRL and URL.
+<br>
+<br><br>
+<strong>Instrument minimum span
+</strong><br>
+The minimum distance between the URV and LRV for which the instrument is designed. It is a physical limitation of the device.
+<br><br>
+<strong>Instrument maximum span	
+</strong><br>
+The maximum distance between the URV and LRV for which the instrument is designed. It is a physical limitation of the device.
+<br>
+
+				</p>
+			
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+
+        <!-- Slide 9:Definitions -->
+        <section id="slide-8" class="slide">
+         <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Definitions
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  	 <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture5.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>   
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Process control terms
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+			
+					<br> 
+              	  <p style=" color: black;">
+				<strong>Process Variable (PV)
+</strong><br>
+Is a condition of the process fluid (liquid or gas) that can change the manufacturing process.
+<br><br>
+** In the example of the tank , the process variable is level.<br>
+** Common process variables include:<br>
+- Pressure <br>
+- Level<br>
+- Flow <br>
+- Temperature <br>
+- Density <br>
+- Liquid interface <br>
+- PH<br>
+- Mass<br>
+- Conductivity
+
+<br>
+
+				</p>
+			
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+ <!-- Slide 10:Process control terms-->
+        <section id="slide-9" class="slide">
+		                  <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Process control terms
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  <p style=" color: black;">
+				<strong>Setpoint (SP)
+</strong><br>
+Is a value for the process parameter that is desired to be maintained.
+<br><br>
+<strong>Measured variable or Controlled variable (Y / MV)</strong><br>
+Is a condition of the process fluid (liquid or gas) that is required to be kept as the designated setpoint.
+<br><br>
+<strong>Manipulated Variable (U)</strong><br>
+Is the variable controlled by process Controller in order to offset the Process Disturbance. The variables Y and U are related to each other; hence a variation in U can cause a variation in Y
+<br><br>
+Sometimes the measured variable is not same as the process variable.<br><br>
+     ** Example:<br>
+     Measure flow into and out of a storage tank to determine the tank level.
+
+
+				</p>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Process control terms
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+			
+					<br> 
+              	  <p style=" color: black;">
+				<strong>Closed control loop
+</strong><br>
+A closed control loop exists where a process variable is measured , compared to a setpoint and action is taken to correct any deviation from set point.
+<br>
+<br>
+
+				</p>
+				 <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture6.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>   
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+		<!-- Slide 11: Feedback control loop -->
+        <section id="slide-10" class="slide">
+				                  <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Process control terms
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  <p style=" color: black;">
+				<strong>Feedback control loop
+</strong><br>
+</p>
+ <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture7.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>   
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Feedback control loop
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+			
+					<br> 
+              	  <p style=" color: black;">
+				
+The controlled variable (Y) is measured with a sensor. Value of measured variable is transferred to the controller. The controller compares obtained (Y) value with desired (Ysp). If both are same then no control action is needed.
+<br>
+<br>
+If the disturbance (D) affects the process which leads to deviation of the value of the controlled variable (Y) from (Ysp) then the controller will manipulate the variable U.
+<br>
+<br>
+The variables Y and U are related to each other; a variation in U causes a variation in Y.
+
+<br>
+<br>
+The greatest advantage of this control system is that it does not require any knowledge about the nature of the disturbance (D) or physical model of the process.
+<br>
+<br>
+The drawback is that it starts corrective action after Deviation affects Process 
+
+			</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+				<!-- Slide 11: Open control loop -->
+        <section id="slide-10" class="slide">
+		   				                  <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Process control terms
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  <p style=" color: black;">
+				<strong>Open control loop
+</strong><br>
+An open control loop exists where a process variable is measured, but the action is taken not in response to the feedback on the condition of the process variable.
+<br>
+</p>
+ <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture8.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>   
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Feedback control loop
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+			 <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture9.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>  
+					<br> 
+              	  <p style=" color: black;">
+				
+A sensor is used to measure the disturbance (D) instead of the controlled variable (Y). The information of this measured disturbance (D) is sent to the controller.
+<br>
+<br>
+If the disturbance (D) affects the process which leads to deviation of the value of the controlled variable (Y) from (Ysp) then the controller will manipulate the variable U in such a way so as to prevent the effect which may be caused by the disturbance (D) on the process.
+<br>
+	</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+		<!-- Slide 12: Process control terms  -->
+        <section id="slide-11" class="slide">
+		    <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Feedback control loop
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  <p style=" color: black;">
+			<strong>	Advantage:<br></strong>
+- This control system starts to take corrective action before the disturbance has any effect on the operation of the process.
+<br>
+<br>
+<strong>Disadvantage<br></strong><br>
+Knowledge about the Physical model of the process is very important because this information is utilized by the controller in order to manipulate the variable U.<br>
+** Often exact models are not available hence approximate models are used to determine what is the relationship between controlled variable (Y), manipulated variable (U) and Disturbance (D).<br>
+<br>Another disadvantage is that it is very difficult to account for all the disturbances in the system.<br>
+** Some are qualitatively known but it is impossible or very difficult to measure them.
+	
+</p>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Process control terms
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+					<br> 
+              	  <p style=" color: black;">
+				
+<strong>Error<br></strong>
+Is the difference between the measured variable and the setpoint.
+<br>
+<br>
+Any error is having three major components:
+<br>
+- Magnitude
+<br>
+- Duration
+<br>
+- Rate of change
+<br>
+<br>
+<strong>A. Magnitude<br></strong>
+Is the deviation between the value of setpoint and the process variable.
+<br><br>
+<strong>B. Duration<br></strong>
+Refers to the long of the time that an error condition has existed.
+<br><br>
+<strong>C. Rate of change<br></strong>
+The Slope of the error plot.
+<br><br>
+			<strong>D. Offset<br></strong>
+Is a sustained deviation of the process variable for the set point.
+<br>
+<br>
+<strong>E. Load disturbance <br></strong><br>
+Undesired change in one of the factors that can affect the process variable.
+<br>
+<br>
+<strong>F. Control Algorithm  f(e) <br></strong><br>
+Is a mathematical expression of a control function for the relation between the error and final control element.
+
+			</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+		 <!-- Slide 13: Control algorithms-->
+<section id="slide-12" class="slide">
+       <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Control algorithms
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  <p style=" color: black;">
+			<strong>	Manual control<br></strong>
+Suppose that there is a source of feed liquid flows into tank at a vary rate from somewhere else in a process plant as per below schematic. <br>
+</p>
+<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture10.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Manual control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+					<br> 
+              	  <p style=" color: black;">
+				
+Operator has the task of holding the temperature near the desired temperature while making sure that the tank doesn’t over-flow or level get too low.
+<br>
+<br>
+Accordingly, operator should manually adjust:<br>
+- inlet valve (HV-1) to maintain the temperature<br>
+- outlet valve (HV-2) to maintain the correct level in the tank.
+<br><br>
+<strong>This is called manual control.</strong>
+<br><br>
+Here the operator would face several problems as that both indicators would be within the operator view and manual valves would be close to the operator.
+
+			</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+		 <!-- Slide 13: On Off Control-->
+<section id="slide-12" class="slide">
+           <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Control algorithms
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  <p style=" color: black;">
+			<strong>	On Off Control<br></strong>
+To make the operator work easier, electrically operated solenoid valves in place of manual valves shall be used.<br>
+But in this case, each valve can assume one of two states , either fully open or fully close.
+</p>
+
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">On Off Control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+					<br> 
+              	  <p style=" color: black;">
+				
+This type of control is called two position or on off control.
+<br>
+<br>
+Assume that the level is holding steady, and the main concern is controlling the temperature.
+<br><br>
+Because of process dead time and lags, the temperature will continue to rise before reversing and moving toward the set point.
+
+			</p>
+			<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture12.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+					 
+	  <p style=" color: black;">
+				
+This cycling is normal for on off control because that the system control the process within only two options.
+<br>
+<br>
+As in this example, the On off control mode, the valve is open when the error is positive, and the valve is closed when the error is negative.
+
+			</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+		<!-- Slide 14: Modulating Control -->
+      <section id="slide-14" class="slide">
+	     <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Control algorithms
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  <p style=" color: black;">
+			<strong>	Modulating Control
+<br></strong>
+Modulating control is a method of regulating a Process’s variable by continuously adjusting a component's position or setting to maintain a desired state, rather than just turning it completely on or off. 
+<br><br>
+It allows for precise, gradual adjustments of variables like flow rate, temperature, or pressure.
+<br><br>
+This is achieved by a control system that sends a signal to a device, such as a modulating valve or boiler, to operate at an intermediate position instead of just the fully open or fully closed states. 
+<br><br>
+
+</p>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Modulating Control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+					<br> 
+              	  <p style=" color: black;">
+				
+	<strong>	Proportional control
+<br></strong>
+If balance between energy in and out in addition to smoother control is required, a steady flow of hot water shall be maintained rather than sudden change.
+
+<br>
+<br>
+Accordingly, the modification to control valves instead of on off valves is required.
+
+			</p>
+			<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture13.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+	<!-- Slide 15: Modulating Control -->
+      <section id="slide-14" class="slide">
+		     <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Modulating Control
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">	
+				  <p style=" color: black;">
+			<strong>	Proportional control
+<br></strong>
+The requirement is that once that average flow value has been established for the hot water, increase or decrease of the error must be allowed to cause corresponding increase and decrease in the water flow from the normal value.
+<br><br>
+This illustrates the concept of proportional control 
+<br><br>
+(initiating a corrective action to a value that is in some proportion to the change in error)
+<br><br>
+
+</p>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Proportional control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture14.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+					<br> 
+              	  <p style=" color: black;">
+				
+
+The proportional control can be illustrated by using the following three graphs
+<br>
+- One to one relation <br>
+- Large error change to action<br>
+- Small error change to action<br>
+
+			</p>
+			
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+			
+				 <!-- Slide 16: Proportional control-->
+<section id="slide-12" class="slide">
+   	     <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Modulating Control
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture15.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>				  
+			
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Proportional – Integral control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+				 	  <p style=" color: black;">
+When controller is designed to provide this mode of control, it must contain two adjustments:<br>
+One for the gain (Kc) term and one for the manual (m) term.
+<br><br>
+Proportional control rarely ever keeps the process variable at the set point if there is a change in the set point or disturbances to the process.
+<br><br>
+The larger Kc is the smaller offset ; however, Kc can’t be increased to infinity because the control loop will become unstable.
+<br>
+
+</p>
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture14.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+					<br> 
+              	  <p style=" color: black;">
+				
+
+The question then is on what basis should the manual reset be automated?
+<br>
+The most common practice is to move the control valve at a speed or rate proportional to the error. <br>
+In that it would seem to move the valve faster as the error got larger.
+ <br><br>
+The added control mode is called Integral or reset action.
+<br><br>
+It us usually used in conjunction with proportional control to eliminates the offset. 
+<br>
+
+			</p>
+			
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+			 <!-- Slide 16: Proportional – Integral control-->
+<section id="slide-12" class="slide">
+       	     <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Proportional – Integral control
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture16.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>				  
+			
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Proportional – Derivative control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+				 	  <p style=" color: black;">
+One problem with PI controller bears mentioning. If a control loop using PI control, the possibility exists with the integral mode that the controller will continue to integrate and change the output even outside the operating range of the controller.
+This condition is called “reset windup”
+
+<br><br>
+It is possible to prevent this problem of controller reset windup by using a controller operational feature that limits the integration and the controller output.<br>
+This feature is called “anti-reset windup”
+<br><br>
+The larger Kc is the smaller offset ; however, Kc can’t be increased to infinity because the control loop will become unstable.
+<br><br>
+We can add to the proportional control another action called derivative action.<br>
+This control function produces a corrective action that is proportional to the rate of change of error.<br>
+Noting that this additional correction exists only when the error is changing as it disappears when the error stops changing even though there may still be a large error.
+<br>
+</p>
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture17.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+						 <!-- Slide 16: Proportional – Integral – Derivative control-->
+<section id="slide-12" class="slide">
+       <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+				     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Proportional – Integral – Derivative control
+</h3>
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+				  				 	  <p style=" color: black;">
+The PID controller is used on process that respond slowly and have long periods.
+
+<br><br>
+Temperature control is a common example of PID control because the heat rate may have to change rapidly when the temperature measurement begins to change, and the derivate action shortens the response of the slow process to an upset (disturbance).
+
+
+</p>	  		
+            </div>
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Modulating Control -  Feedback control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+				 	  <p style=" color: black;">
+A feedback loop measures a process variable and sends the measurement to a controller for comparison to setpoint.
+ If the process variable is not at setpoint, control action is taken to return the process variable to setpoint.
+ The below Figure illustrates a feedback loop in which a transmitter measures the temperature of a fluid and, if necessary,
+ opens or closes a hot steam valve to adjust the fluid’s temperature.
+
+<br><br>
+The advantage of a feedback loop is that it directly controls the desired process variable.
+ The disadvantage to feedback loops is that the process variable must leave setpoint for action to be taken.
+</p>
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture18.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+				
+<!-- Slide 17: Modulating Control-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+    <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+     style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+    
+    <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">
+        Modulating Control – Cascade control
+    </h3>
+    
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+        
+        <p style=" color: black;" class="mb-4">
+            Cascade control involves the use of two controllers with the output of the first controller (Primary/ Outer) providing the setpoint for the second controller (Secondary/ Inner), the feedback loop for one controller nestling inside the other. Such a system can give improved response to disturbances.
+            Cascade control is also called master slave control.
+        </p>
+        
+        <div class="flex justify-center items-center space-x-4">
+            
+            <div class="w-1/2 h-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/Picture19.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+            
+            <div class="w-1/2 h-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/Picture20.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+            
+        </div>
+        </div>
+</div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Modulating Control -  Feedforwad control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+				 	  <p style=" color: black;">
+Cascade control can reduce the effect of disturbances occurring early in the forward loop, but generally cannot deal with load/demand disturbances which occur close to, or affect directly the process variable as there is no intermediate variable or accessible control point.
+
+<br><br>
+In a feed-forward system, the control variable adjustment is not error-based. Instead, it is based on knowledge about the process in the form of a mathematical model of the process and knowledge about, or measurements of, the process disturbances. 
+
+</p>
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture21.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+				 <!-- Slide 17:  Modulating Control-->
+<section id="slide-12" class="slide">
+      <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+    <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+     style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+    
+    <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">
+        Modulating Control – Ratio control
+    </h3>
+    
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+        
+        <p style=" color: black;" class="mb-4">
+        A ratio controller is a special type of feedforward control where disturbances are measured and their ratio is held at a desired set point by controlling one of the streams.
+<br><br>
+Ratio control can be used when two fluids must be mixed in a specific ratio.  
+A practical way to do this is to use a standard control system to control the flow on one line.  The same transmitter signal is used as a set point for a second controller which controls the flow in a second line.  
+<br><br>
+The ratio of one flow rate to the other can be changed by adjusting the gain (or proportional band) of the secondary controller. 
+
+        </p>
+        
+        <div class="flex justify-center items-center space-x-4">
+            
+            <div class="w-full h-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/Picture22.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+            
+        </div>
+        </div>
+</div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Modulating Control - Ratio control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+<p style="color: black;">
+    You can get a much better grasp of ratio control by considering some specific examples. Assume we want a “blender,” that is, to blend two streams, A and B, in a proportion or ratio R: 
+</p>
+
+<div style=" color: black;" class="text-center my-4"> 
+    <span  class="text-xl font-mono block">R=B/A</span>
+    </div>
+<p style="color: black;">
+    An example for ratio control is given in figure below, the wild flow A is measured, and then it is multiplied by R to get the required value of B. Thus, as the flow A varies, the set point to the flow...
+</p>
+</p>
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture23.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+	 <!-- Slide 18: Split-Range control-->
+<section id="slide-12" class="slide">
+          <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+    <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+     style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+    
+    <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">
+        Modulating Control – Split-Range control
+    </h3>
+    
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+        
+        <p style=" color: black;" class="mb-4">
+In a split-range control loop, the controller output is split and sent to two or more control valves. The splitter defines how each valve is sequenced as the controller output changes from 0 to 100%. 
+<br><br>
+In most split-range applications, the controller adjusts the opening of one of the valves when its output is in the range of 0 to 50% and the other valve when its output is in the range of 50% to 100%
+<br>
+        </p>
+        
+        <div class="flex justify-center items-center space-x-4">
+            
+            <div class="w-full h-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/Picture24.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+            
+        </div>
+        </div>
+</div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Modulating Control - Split-Range control
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+				 	<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture25.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+					 
+<p style="color: black;">
+PIC-01 controls the pressure of the separator for liquid-vapour hydrocarbons, by means of a split-range controller with the output signal divided and sent to two pressure control valves PV-A and PV-B. When the pressure increases, the fluid must be discharged to burn. When the pressure decreases, combustible gas is introduced to compensate for the pressure of the separator.
+</p>
+				
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+	 <!-- Slide 19: Split-Range control-->
+<section id="slide-12" class="slide">
+           <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+    <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+     style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+    
+    <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">
+        Modulating Control – Split-Range control
+    </h3>
+    
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+             <div class="w-fullh-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/Picture26.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+        <p style=" color: black;" class="mb-4">
+The fuel gas valve (PV-B) must close in response to the increased pressure in the separator, while the flared valve (PV-A) should open when the pressure rises beyond the set point.
+
+<br><br>
+- When the pressure increases beyond the set point in the 0-50% range of the controller output, PV-B will close from fully open to fully closed.<br>
+- When the pressure increases beyond the set point in the 50-100% range of the controller output, PV-A will open from completely close to fully open.
+<br><br>
+Another use case of the split range control loop is when a control valve cannot be suitably designed to cover the full operating range of the controller. In that case, the valve with a smaller Cv operated between a range of 0-50% and the other operated for a range of 50-100%
+
+        </p>
+
+        </div>
+</div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Components of control loop and ISA symbology 
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+				 
+					 
+<p style="color: black;">
+<strong>Primary elements / sensors </strong><br>
+Devices that cause some change in their property with changes in the process fluid conditions that can then be measured.
+<br><br>
+Examples of dedicated primary elements:<br>
+- Resistance temperature detectors (RTDs)<br>
+- Thermocouples <br>
+- Orifice plates<br>
+- Pitot tubes<br>
+- Coriolis flow types<br>
+- Annubar flow elements<br>
+- Vortex shedder<br>
+<br>
+<strong>Transducers</strong><br>
+Devices that translates the sensor change to measured signal.
+<br><br>
+<strong>Transmitters</strong><br>
+A device that converts the change from sensor to a standard signal.
+<br><br>
+<strong>Signals</strong><br>
+- Analog signal<br>
+- Digital signal<br>
+- Pneumatic signal<br>
+- Hydraulic signal
+<br>
+</p>
+				
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+<!-- Slide 191: Components of control loop and ISA symbology -->
+<section id="slide-12" class="slide">
+              <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+
+    <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+     style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+    
+    <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">
+Components of control loop and ISA symbology - Indicators
+    </h3>
+    
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+        
+  <div class="flex flex-col items-center space-y-4">
+    
+    <div class="flex justify-center items-center space-x-4 w-full">
+        
+        <div class="w-1/2 h-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+            <img src="imeges/Picture27.jpg"
+                 alt="صورة نظام تحكم"
+                 class="zoomable w-full h-full object-contain cursor-zoom-in">
+        </div>
+        
+        <div class="w-1/2 h-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+            <img src="imeges/Picture28.jpg"
+                 alt="صورة نظام تحكم"
+                 class="zoomable w-full h-full object-contain cursor-zoom-in">
+        </div>
+        
+    </div>
+    
+    <p style="color: black;" class="mb-4 text-center max-w-2xl px-2">
+        Indicators may be as simple as a transmitter while in some others have control buttons that enable operators to change settings in the field.
+    </p>
+</div>
+        </div>
+</div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Components of control loop and ISA symbology - Alarming
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture29.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+			  <p style=" color: black;">
+The Annunciator panel Indicates the Alarming Triggers to the Operator to take action.
+
+</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+	 <!-- Slide 20: Components of control loop and ISA symbology - Recorders-->
+<section id="slide-12" class="slide">
+               <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+	 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Components of control loop and ISA symbology - Recorders
+</h3>
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+                <p style=" color: black;" class="mb-4">
+The Alarm Display for operator.
+<br>
+		
+    
+        </p>
+	<div class="w-fullh-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/Picture30.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+        </div>
+			 </div>
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Components of control loop and ISA symbology - Recorders
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture31.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+			  <p style=" color: black;">
+The Recorder is an electromechanical device that records an Process Variable input trend onto a piece of paper (the chart)
+
+</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+<!-- Slide 201: Control  Systems-->
+<section id="slide-12" class="slide">
+      <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+	 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Control  Systems
+</h3>
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+                <p style=" color: black;" class="mb-4">
+<strong>PLC: </strong>    
+ 	Programmable Logic Controller <br>
+
+<strong>DCS : </strong>     	Distributed Control System <br>
+
+<strong>SCADA : </strong>	Supervisory Control and Data Acquisition<br>
+
+<strong>SIS :   </strong>     	Safety Instrumented Systems <br>
+<br>
+		
+    
+        </p>
+		   <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Distributed Control System (DCS)
+</h3>
+	<div class="w-fullh-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/picture32.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+        </div>
+			 </div>
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Controllers
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture33.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+			  <p style=" color: black;">
+The Recorder is an electromechanical device that records an Process Variable input trend onto a piece of paper (the chart)
+
+</p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+		
+	 <!-- Slide 21: Programmable Logic Controller (PLC)-->
+<section id="slide-12" class="slide">
+       <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+	 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Programmable Logic Controller (PLC)</h3>
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+
+	<div class="w-fullh-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/picture34.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+        </div>
+			 </div>
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Programmable Logic Controller (PLC)
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+                <p style=" color: black;" class="mb-4">
+ Programmable controllers started with sequence/logic functions, then continuous control functions were added. 
+ <br><br>
+
+PLC can be programmed to replace thousands of relays.
+<br>
+        </p>
+					<div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/Picture35.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+		
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+	 <!-- Slide 211: SCADA System-->
+<section id="slide-12" class="slide">
+	     <div class="slide-content-wrapper">
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-bottom: 80px;">  
+	 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">SCADA System</h3>
+    <div class="bg-gray-100 flex flex-col h-full overflow-hidden p-4 rounded-xl">
+      <p style=" color: black;" class="mb-4">
+SCADA system is used when there are several groups of points (representing input / output data) located at large distances between each other as well as the control room.
+ <br><br>
+ </p>
+	<div class="w-fullh-full bg-slate-100 overflow-hidden rounded-lg shadow-md">
+                <img src="imeges/Picture36.jpg"
+                     alt="صورة نظام تحكم تعاقبي"
+                     class="zoomable w-full h-full object-contain cursor-zoom-in">
+            </div>
+        </div>
+			 </div>
+			 
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+	     <h3 style="font-size: 20px;" class="text-3xl font-bold text-slate-800 mb-2 slide-header">Safety Instrumented Systems (SIS)
+
+</h3>
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">  
+                <p style=" color: black;" class="mb-4">
+SIS systems are normally PLC based with special requirements of high integrity which forces duplex, triplex, or quadruples configuration.
+ <br><br>
+
+These systems are normally certified , according to a required SIL level (Safety Integrity level ) by recognized certifying organizations.
+<br>
+        </p>
+            </div>
+            </div>
+        </div>
+    </div>
+        </section>
+
+	 <!-- Slide 212: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture37.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture38.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+	 <!-- Slide 213: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture39.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture40.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+ <!-- Slide 213: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture41.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture42.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+ <!-- Slide 213: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture43.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture44.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+ <!-- Slide 213: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture45.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture46.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+ <!-- Slide 213: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture47.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+			
+			 <div class="training-card off-job w-full md:w-[45%] p-6 rounded-xl shadow relative" 
+                 style="background-color: #7587b6; color: white; border-radius: 20px; min-height: 450px; padding-top: 20px; margin-left: auto;">
+
+                 <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture48.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+
+ <!-- Slide 213: LIGHITNG CALCULATIONS AND LAYOUT-->
+<section id="slide-12" class="slide">
+    <div class="slide-content-wrapper">
+	                <div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200">                    
+
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative pt-20" style="padding-top: 40px;">  
+
+            <div class="training-card on-job w-full md:w-[45%] p-6 rounded-xl shadow relative"
+                 style="background-color: white; color: white; border-radius: 20px; min-height: 450px; padding-top: 50px; margin-right: auto;">
+                  <div class="bg-gray-100 flex flex-col h-full overflow-hidden">
+                <div class="w-full h-full bg-slate-100 overflow-hidden">
+                     <img src="imeges/picture49.jpg"
+                          alt="صورة اجتماع تعريفي لـ HSE" 
+                          class="zoomable w-full h-full object-contain cursor-zoom-in" >
+                     
+                     </div>
+            </div>
+
+
+            </div>
+        </div>
+		 </div>	    
+    </div>
+        </section>
+		
+<!-- Slide 59: Conclusion -->
+        <section id="slide-58" class="slide flex flex-col justify-center items-center text-center p-4">
+             <div class="bg-white p-10 md:p-16 rounded-2xl shadow-xl max-w-4xl w-full">
+                <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">✓</div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6">Course Complete</h1>
+                <p class="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">Thank You</p>
+                <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-full shadow-lg">
+                    Restart Course
+                </button>
+            </div>
+        </section>
+		
+		
+   </main>
+
+    <!-- Footer: Nav -->
+       <footer class="bg-white shadow-inner p-4 z-10 flex-shrink-0 border-t border-slate-200">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <button id="prev-btn" class="bg-white border border-slate-300 text-slate-700 font-bold py-2 px-6 rounded-lg shadow-sm hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            Previous
+        </button>
+        <div class="flex-1 mx-4">
+            <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out" style="width: 0%;"></div> 
+            </div>
+        </div>
+        <button id="next-btn" class="bg-blue-800 text-white font-bold py-2 px-6 rounded-lg shadow hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            Next
+        </button>
+    </div>
+</footer>
+
+  <!-- Zoom Overlay -->
+<div id="zoomOverlay"
+     class="hidden fixed inset-0 bg-black/80 flex items-center justify-center overflow-hidden z-50">
+    <img id="zoomedImage"
+         class="max-w-[90%] max-h-[90%] rounded-lg transition-transform cursor-zoom-out"
+         src="">
+</div>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevButton = document.getElementById('prev-btn');
+        const nextButton = document.getElementById('next-btn');
+        const slideCounter = document.getElementById('slide-counter');
+        const progressBar = document.getElementById('progress-bar');
+        
+        // ** إضافة متغير حالة البدء وربط زر Start **
+        let isStarted = false; 
+        const startButton = document.getElementById('start-btn'); // يجب أن يكون هذا الـ ID موجوداً في HTML الشريحة 0
+        // ... (بقية المتغيرات)
+
+        const videoModal = document.getElementById('video-modal');
+        const videoModalContent = document.getElementById('video-modal-content');
+        const youtubeIframe = document.getElementById('youtube-iframe');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const playVideoBtns = document.querySelectorAll('.play-video-btn');
+
+        function showSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            
+            slides[currentSlideIndex].classList.remove('slide-visible');
+            slides[currentSlideIndex].classList.add('slide-hidden');
+            
+            slides[index].classList.remove('slide-hidden');
+            slides[index].classList.add('slide-visible');
+            
+            currentSlideIndex = index;
+            updateNavigation();
+            
+            // Scroll top content
+            const content = slides[index].querySelector('.slide-content-wrapper');
+            if (content) content.scrollTop = 0;
+        }
+
+        function updateNavigation() {
+            slideCounter.textContent = `Slide ${currentSlideIndex + 1} / ${totalSlides}`;
+            const progressPercentage = ((currentSlideIndex + 1) / totalSlides) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            
+            prevButton.disabled = (currentSlideIndex === 0);
+            
+            // ** المنطق المُعدّل لزر Next **
+            // يتم التعطيل فقط إذا: 
+            // 1. كنا في الشريحة الأخيرة.
+            // 2. أو كنا في الشريحة 0 ولم نضغط على Start بعد.
+            const shouldBeDisabled = (currentSlideIndex === totalSlides - 1) || 
+                                     (currentSlideIndex === 0 && !isStarted);
+                                     
+            nextButton.disabled = shouldBeDisabled;
+        }
+
+        prevButton.addEventListener('click', () => showSlide(currentSlideIndex - 1));
+        
+        // ** ملاحظة: زر Next سيتفعل تلقائياً بعد الانتقال للشريحة 1 **
+        nextButton.addEventListener('click', () => showSlide(currentSlideIndex + 1));
+
+        // ** مستمع حدث زر Start (التعديل الرئيسي) **
+        if (startButton) {
+            startButton.addEventListener('click', () => {
+                isStarted = true; // تفعيل حالة البدء
+                
+                // الانتقال إلى الشريحة التالية (الشريحة 1)
+                showSlide(currentSlideIndex + 1);
+                
+                // إخفاء زر Start بعد بدء الدورة
+                // إذا لم تكن تريد إخفاءه، احذف السطر التالي
+                startButton.classList.add('hidden'); 
+            });
+        }
+        
+        // ... (بقية أكواد الـ Video Modals والـ Zoom)
+
+        const zoomableImages = document.querySelectorAll(".zoomable");
+        const overlay = document.getElementById("zoomOverlay");
+        const zoomImg = document.getElementById("zoomedImage");
+
+        let scale = 1;
+        let isDragging = false;
+        let startX, startY;
+        let translateX = 0;
+        let translateY = 0;
+
+        zoomableImages.forEach(img => {
+            img.addEventListener("click", () => {
+                zoomImg.src = img.src;
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                zoomImg.style.transform = `translate(0px, 0px) scale(1)`;
+                overlay.classList.remove("hidden");
+            });
+        });
+
+        overlay.addEventListener("click", (e) => {
+            if (e.target === overlay) {
+                overlay.classList.add("hidden");
+            }
+        });
+
+        zoomImg.addEventListener("wheel", (e) => {
+            e.preventDefault();
+            scale += e.deltaY < 0 ? 0.1 : -0.1;
+            if (scale < 1) scale = 1;
+            if (scale > 5) scale = 5;
+            zoomImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        });
+
+        zoomImg.addEventListener("mousedown", (e) => {
+            if (scale <= 1) return;
+            isDragging = true;
+            zoomImg.style.cursor = "grabbing";
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+        });
+
+        zoomImg.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            zoomImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        });
+
+        zoomImg.addEventListener("mouseup", () => {
+            isDragging = false;
+            zoomImg.style.cursor = "grab";
+        });
+
+        zoomImg.addEventListener("mouseleave", () => {
+            isDragging = false;
+        });
+        
+        // تهيئة البدء
+        updateNavigation();
+    });
+</script>
+
+</body>
+</html>
